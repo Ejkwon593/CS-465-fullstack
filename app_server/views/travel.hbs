@@ -2,14 +2,15 @@
 
 <h2>Travel Packages</h2>
 <ul>
-  <li>
-    <h3>Gale Reef Adventure</h3>
-    <p>Enjoy diving and snorkeling in beautiful coral reefs.</p>
-  </li>
-  <li>
-    <h3>Bali Retreat</h3>
-    <p>Relax in a tropical paradise with luxury resorts.</p>
-  </li>
+  {{#each trips}}
+    <li style="margin-bottom: 30px; list-style: none;">
+      <h3>{{title}}</h3>
+      <p>{{description}}</p>
+      <p><strong>Price:</strong> ${{price}}</p>
+      <img src="/images/{{image}}" alt="{{title}}" 
+           style="width:300px; height:auto; margin-top:10px; border-radius:10px;">
+    </li>
+  {{/each}}
 </ul>
 
 {{> footer}}

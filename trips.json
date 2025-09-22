@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Bali Retreat",
+    "description": "Relax in a tropical paradise with luxury resorts.",
+    "price": 1200,
+    "image": "bali.jpg"
+  },
+  {
+    "title": "Gale Reef Adventure",
+    "description": "Enjoy diving and snorkeling in coral reefs.",
+    "price": 950,
+    "image": "reef1.jpg"
+  },
+  {
+    "title": "Mountain Explorer",
+    "description": "A guided hike through breathtaking mountain landscapes.",
+    "price": 800,
+    "image": "mountain.jpg"
+  }
+]

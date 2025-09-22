@@ -42,7 +42,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// ✅ Start the server
+
 app.listen(3000, () => {
   console.log('Travlr app running on http://localhost:3000');
 });
