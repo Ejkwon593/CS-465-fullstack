@@ -1,57 +1,120 @@
-# CS-465 Fullstack – Travlr Getaways
+CS-465-Fullstack
 
-This project is part of the **CS-465 Full Stack Development with MEAN** course at Southern New Hampshire University (SNHU).  
-The goal is to build a travel website using **Node.js, Express, and Handlebars**, rendering dynamic content from a JSON file.
+CS-465 Full Stack Development with MEAN
 
-Author
+Module 4: Database Integration
+Overview
 
-Eddy Kwon
-Southern New Hampshire University – CS-465
+In this module, the Travlr Getaways web application was extended to include a MongoDB database connection. Using Mongoose, schemas and models were created to define the structure of trip data. This allows dynamic retrieval of trips from the database rather than using static files.
 
----
+Steps Completed
 
-## 📂 Project Structure
-ravlr/
-├── app.js # Main server file (Express setup)
-├── package.json # Project dependencies
-├── app_server/ # Controllers, routes, and views
-│ ├── controllers/ # Logic for handling data
-│ ├── routes/ # Route definitions
-│ └── views/ # Handlebars templates
-│ └── partials/ # Header, footer, etc.
-├── public/ # Static files (CSS, images, etc.)
-├── trips.json # Travel packages data
-└── README.md # Project documentation
+1.Database Access Module
 
----
+Installed Mongoose:
 
-## How to Run
-1. Install dependencies:
-   ```bash
-   npm install
+npm install mongoose --save
 
-Start the application:
+
+Created db.js to connect Express to MongoDB (mongodb://localhost:27017/travlr).
+
+2.Trip Schema & Model
+
+Defined trips.js in app_api/models with fields:
+
+code (unique ID)
+
+name
+
+length
+
+start (date)
+
+resort
+
+perPerson (cost)
+
+image (URL/path)
+
+description
+
+3.Populate Database
+
+Imported trips.json into MongoDB using:
+
+mongoimport --db travlr --collection trips --file trips.json --jsonArray
+
+
+Verified records (Bali Reef, Mountain Trip, etc.) exist in the collection.
+
+4.API Integration
+
+Created controller trips.js inside app_api/controllers.
+
+Implemented logic to query trips from MongoDB and return results in JSON format.
+
+Created Express route (/api/trips) to expose trip data to the frontend.
+
+5.Testing
+
+Confirmed connection with mongosh and verified data exists in the travlr.trips collection.
+
+Ran the app with:
+
 npm start
 
-Open in your browser:
-http://localhost:3000
 
-Available Pages
+Validated JSON data returned at:
 
-/ → Home page
+http://localhost:3000/api/trips
 
-/travel → Travel packages (loaded from trips.json)
+Technology Used
 
-/rooms, /meals, /news → Navigation links (placeholders for now)
+MongoDB (database)
 
-Example Data (trips.json)
-[
-  {
-    "title": "Bali Retreat",
-    "description": "Relax in a tropical paradise with luxury resorts.",
-    "price": 1200,
-    "image": "bali.jpg"
-  }
-]
+Mongoose (object modeling)
+
+Express.js (API layer)
+
+Node.js (runtime)
+
+Setup Instructions
+
+To run the project locally:
+
+1.Clone the repository.
+
+2.Navigate into the project folder:
+
+cd travlr
 
 
+3.Install dependencies:
+
+npm install
+
+
+4.Start MongoDB server:
+
+mongod --dbpath C:\data\db
+
+
+5.Import sample data:
+
+mongoimport --db travlr --collection trips --file trips.json --jsonArray
+
+
+6.Start the application:
+
+npm start
+
+
+7.Open browser and visit:
+
+http://localhost:3000/api/trips
+
+Next Steps
+
+Connect Angular SPA to consume the trips API.
+
+Implement CRUD operations for administrators to manage trip data.
