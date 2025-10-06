@@ -7,13 +7,14 @@ var logger = require('morgan');
 // Connect to MongoDB
 require('./app_api/db');
 
-// Rutas
+// Import routes
 var indexRouter = require('./app_server/routes/index');
 var travelRouter = require('./app_server/routes/traveler');
+var tripsRouter = require('./app_api/routes/trips'); // 
 
 var app = express();
 
-// view engine setup
+// View engine setup
 app.set('views', path.join(__dirname, 'app_server', 'views'));
 app.set('view engine', 'hbs');
 
@@ -27,22 +28,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Rute
+// Website routes
 app.use('/', indexRouter);
 app.use('/travel', travelRouter);
 
-// load API routes
-const tripsRouter = require('./app_api/routes/trips');
+//  API routes mounted here
+app.use('/api', tripsRouter);
 
-// use API
-app.use('/api/trips', tripsRouter);
-
-// catch 404 and forward to error handler
+// Catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
-// error handler
+// Error handler
 app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -51,6 +48,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+
+// Start the server
 app.listen(3000, () => {
   console.log('Travlr app running on http://localhost:3000');
 });
