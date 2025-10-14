@@ -118,3 +118,20 @@ Next Steps
 Connect Angular SPA to consume the trips API.
 
 Implement CRUD operations for administrators to manage trip data.
+
+Eddy Kwon
+CS-465 Full-Stack Development I 
+Travlr Getaways Final Project week 6
+
+Instructions to run:
+
+1. Start MongoDB service (mongod).
+2. Run backend:
+   npm install
+   npm start
+3. Run Angular frontend:
+   cd travlr-app
+   npm install
+   ng serve
+4. Visit http://localhost:4200 to view the site.
+5. Visit http://localhost:3000/api/trips to view API data.

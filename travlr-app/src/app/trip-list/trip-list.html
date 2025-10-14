@@ -1,0 +1,7 @@
+<h2 class="page-title">Available Trips</h2>
+
+<div class="trip-list">
+  <div *ngFor="let trip of trips" class="trip-item">
+    <app-trip-card [trip]="trip"></app-trip-card>
+  </div>
+</div>
