@@ -1,59 +1,110 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require('cors'); // 
+// ================================
+// Load environment variables
+// ================================
+require('dotenv').config();
 
+// ================================
+// Import core modules
+// ================================
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require('cors');
+const passport = require('passport');
+const createError = require('http-errors');
+
+// ================================
 // Connect to MongoDB
+// ================================
 require('./app_api/db');
 
-// Import routes
-var indexRouter = require('./app_server/routes/index');
-var travelRouter = require('./app_server/routes/traveler');
-var tripsRouter = require('./app_api/routes/trips'); 
+// ================================
+// Load Passport config
+// ================================
+require('./app_api/config/passport');
 
-var app = express();
+// ================================
+// Import API routes
+// ================================
+const tripsRouter = require('./app_api/routes/trips');
+const authRouter = require('./app_api/routes/auth');
 
-// View engine setup
-app.set('views', path.join(__dirname, 'app_server', 'views'));
-app.set('view engine', 'hbs');
+// ================================
+// Initialize Express app
+// ================================
+const app = express();
 
-// Handlebars setup
-var hbs = require('hbs');
-hbs.registerPartials(path.join(__dirname, 'app_server', 'views/partials'));
-
-// Middleware
+// ================================
+// Middleware setup
+// ================================
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(passport.initialize());
+
+// ================================
+// Serve static files (optional)
+// ================================
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors()); // ✅ ALLOW CORS FOR ANGULAR FRONTEND (http://localhost:4200)
 
-// Website routes
-app.use('/', indexRouter);
-app.use('/travel', travelRouter);
+// ================================
+// Enable CORS (for Angular frontend)
+// ================================
+app.use(
+  cors({
+    origin: 'http://localhost:4200', // Angular frontend
+    methods: 'GET,POST,PUT,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Authorization',
+  })
+);
 
-// API routes
-app.use('/api', tripsRouter);
+// ================================
+// API Routes
+// ================================
+app.use('/api/trips', tripsRouter);
+console.log('✅ Trips router mounted at /api/trips');
 
-// Catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use('/api/auth', authRouter);
+console.log('✅ Auth router mounted at /api/auth');
+
+// ================================
+// Catch 404 errors for unknown routes
+// ================================
+app.use((req, res, next) => {
+  next(createError(404, 'Not Found'));
 });
 
-// Error handler
-app.use(function(err, req, res, next) {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-  res.status(err.status || 500);
-  res.render('error');
+// ================================
+// Handle unauthorized JWT errors
+// ================================
+app.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).json({ message: 'UnauthorizedError' });
+  } else {
+    next(err);
+  }
 });
 
+// ================================
+// Global error handler
+// ================================
+app.use((err, req, res, next) => {
+  console.error('❌ Error:', err.message);
+  res.status(err.status || 500).json({
+    error: true,
+    message: err.message,
+  });
+});
+
+// ================================
 // Start the server
-app.listen(3000, () => {
-  console.log('Travlr app running on http://localhost:3000');
+// ================================
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(` Travlr API running on http://localhost:${PORT}`);
+  console.log('✅ MongoDB connected and API ready.');
 });
 
 module.exports = app;

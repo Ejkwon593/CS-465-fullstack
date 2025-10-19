@@ -1,137 +1,114 @@
-CS-465-Fullstack
+# Travlr Getaways – Full Stack Web Application  
+**Author:** Eddy Kwon  
+**Course:** CS-465 – Full Stack Development I  
+**Date:** October 15, 2025  
+**Version:** 1.2 (Final Submission)
 
-CS-465 Full Stack Development with MEAN
+---
 
-Module 4: Database Integration
-Overview
+##  Overview
+This project is a **full stack web application** built for the fictional travel agency **Travlr Getaways**. It demonstrates integration of the **MEAN stack** (MongoDB, Express, Angular, and Node.js) to create both a **customer-facing website** and an **administrator single-page application (SPA)**.
 
-In this module, the Travlr Getaways web application was extended to include a MongoDB database connection. Using Mongoose, schemas and models were created to define the structure of trip data. This allows dynamic retrieval of trips from the database rather than using static files.
+The goal of the project was to develop a functional web system where users can view travel packages, and administrators can manage trip information through API interactions with a NoSQL database.
 
-Steps Completed
+---
 
-1.Database Access Module
+##  Technologies Used
+- **MongoDB** – NoSQL database for storing travel packages  
+- **Express.js** – Web framework for handling routing and API endpoints  
+- **Angular** – Front-end SPA framework for dynamic data display  
+- **Node.js** – Server runtime for backend operations  
+- **Handlebars (HBS)** – Template engine for rendering dynamic customer-facing pages  
+- **Bootstrap** – CSS framework for responsive design  
+- **CORS** – Middleware to allow cross-origin requests between front and back end  
 
-Installed Mongoose:
+---
 
-npm install mongoose --save
+## Project Structure
 
-
-Created db.js to connect Express to MongoDB (mongodb://localhost:27017/travlr).
-
-2.Trip Schema & Model
-
-Defined trips.js in app_api/models with fields:
-
-code (unique ID)
-
-name
-
-length
-
-start (date)
-
-resort
-
-perPerson (cost)
-
-image (URL/path)
-
-description
-
-3.Populate Database
-
-Imported trips.json into MongoDB using:
-
-mongoimport --db travlr --collection trips --file trips.json --jsonArray
-
-
-Verified records (Bali Reef, Mountain Trip, etc.) exist in the collection.
-
-4.API Integration
-
-Created controller trips.js inside app_api/controllers.
-
-Implemented logic to query trips from MongoDB and return results in JSON format.
-
-Created Express route (/api/trips) to expose trip data to the frontend.
-
-5.Testing
-
-Confirmed connection with mongosh and verified data exists in the travlr.trips collection.
-
-Ran the app with:
-
-npm start
+travlr/
+│
+├── app_api/ # API logic (routes, controllers, models)
+│ └── routes/trips.js
+│
+├── app_server/ # Express MVC structure for customer website
+│ ├── routes/
+│ ├── controllers/
+│ └── views/
+│
+├── travlr-app/ # Angular project for SPA admin dashboard
+│ ├── src/app/
+│ │ ├── trip-list/
+│ │ ├── trip-card/
+│ │ └── trip-data.service.ts
+│
+├── public/ # Static files
+├── package.json # Node dependencies
+├── app.js # Main Express server file
+├── trips.json # Sample data for seeding the database
+└── README.md # Project documentation (this file)
 
 
-Validated JSON data returned at:
+---
 
-http://localhost:3000/api/trips
+## How to Run the Application
 
-Technology Used
+### **1. Start MongoDB**
+Make sure MongoDB is running locally on your computer:
+```bash
+mongod
 
-MongoDB (database)
+Start the Express Server
 
-Mongoose (object modeling)
-
-Express.js (API layer)
-
-Node.js (runtime)
-
-Setup Instructions
-
-To run the project locally:
-
-1.Clone the repository.
-
-2.Navigate into the project folder:
-
-cd travlr
-
-
-3.Install dependencies:
-
-npm install
-
-
-4.Start MongoDB server:
-
-mongod --dbpath C:\data\db
-
-
-5.Import sample data:
-
-mongoimport --db travlr --collection trips --file trips.json --jsonArray
-
-
-6.Start the application:
+In the root directory (travlr):
 
 npm start
 
 
-7.Open browser and visit:
+This will start the backend on http://localhost:3000
 
-http://localhost:3000/api/trips
+3. Start the Angular App
 
-Next Steps
+In the Angular directory (travlr-app):
 
-Connect Angular SPA to consume the trips API.
+ng serve
 
-Implement CRUD operations for administrators to manage trip data.
 
-Eddy Kwon
-CS-465 Full-Stack Development I 
-Travlr Getaways Final Project week 6
+This will start the front end on http://localhost:4200
 
-Instructions to run:
+ Application Features
+Customer-Facing Website
 
-1. Start MongoDB service (mongod).
-2. Run backend:
-   npm install
-   npm start
-3. Run Angular frontend:
-   cd travlr-app
-   npm install
-   ng serve
-4. Visit http://localhost:4200 to view the site.
-5. Visit http://localhost:3000/api/trips to view API data.
+Built with Express.js and Handlebars (HBS)
+
+Displays available travel destinations with descriptions and prices
+
+Dynamically renders content from MongoDB through the RESTful API
+
+Administrator SPA (Angular)
+
+Built with Angular components for modular UI
+
+Displays available trips retrieved from the API using HttpClient
+
+Uses a TripDataService to connect Angular with the backend
+
+Architecture supports adding PUT and POST routes for future editing and creation of trips
+
+ Testing and Troubleshooting
+
+CORS Issue: Solved by installing and enabling the cors package in app.js
+
+API Connectivity: Tested GET endpoints via both the browser and Angular service
+
+Server Logs: Confirm backend and frontend both run concurrently (npm start + ng serve)
+
+ Future Enhancements
+
+Implement full CRUD features (Add, Edit, Delete trip) via Angular
+
+Add authentication and admin login using JWT (JSON Web Tokens)
+
+Integrate search and filtering for trips
+
+Deploy to a live domain with MongoDB Atlas and Vercel/Render

@@ -1,14 +1,30 @@
 const express = require('express');
 const router = express.Router();
+const tripsController = require('../controllers/trips');
+const jwt = require('jsonwebtoken');
 
-// Bring in the controller functions
-const ctrlTrips = require('../controllers/trips');
+// Middleware JWT validation
+function authenticateJWT(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) return res.sendStatus(401);
 
-// GET all trips → http://localhost:3000/api/trips
-router.get('/trips', ctrlTrips.tripsList);
+  const token = authHeader.split(' ')[1];
+  if (!token) return res.sendStatus(401);
 
-// GET one trip by code → http://localhost:3000/api/trips/BALI01
-router.get('/trips/:tripCode', ctrlTrips.tripsFindByCode);
+  jwt.verify(token, process.env.JWT_SECRET, (err, verified) => {
+    if (err) return res.sendStatus(401);
+    req.auth = verified;
+    next();
+  });
+}
 
-// Export router so app.js can use it
+// Public routes
+router.get('/', tripsController.tripsList);
+router.get('/:tripid', tripsController.tripsFindById);
+
+// Protected routes
+router.post('/', authenticateJWT, tripsController.tripsAddTrip);
+router.put('/:tripid', authenticateJWT, tripsController.tripsUpdateTrip);
+router.delete('/:tripid', authenticateJWT, tripsController.tripsDeleteTrip);
+
 module.exports = router;
