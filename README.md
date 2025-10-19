@@ -6,109 +6,130 @@
 
 ---
 
-##  Overview
-This project is a **full stack web application** built for the fictional travel agency **Travlr Getaways**. It demonstrates integration of the **MEAN stack** (MongoDB, Express, Angular, and Node.js) to create both a **customer-facing website** and an **administrator single-page application (SPA)**.
+Overview
 
-The goal of the project was to develop a functional web system where users can view travel packages, and administrators can manage trip information through API interactions with a NoSQL database.
+This project is part of the CS-465 Full Stack Development course at Southern New Hampshire University.
+The Travlr Getaways application is a full-stack web project that connects a RESTful API backend with a dynamic front-end interface.
+In this module, authentication functionality was implemented using Node.js, Express, MongoDB, Passport, and JSON Web Tokens (JWT).
 
----
+Features Implemented
 
-##  Technologies Used
-- **MongoDB** – NoSQL database for storing travel packages  
-- **Express.js** – Web framework for handling routing and API endpoints  
-- **Angular** – Front-end SPA framework for dynamic data display  
-- **Node.js** – Server runtime for backend operations  
-- **Handlebars (HBS)** – Template engine for rendering dynamic customer-facing pages  
-- **Bootstrap** – CSS framework for responsive design  
-- **CORS** – Middleware to allow cross-origin requests between front and back end  
+User Registration (POST /api/auth/register)
+Allows new users to create an account by submitting their name, email, and password.
+The password is hashed and securely stored in MongoDB.
 
----
+User Login (POST /api/auth/login)
+Authenticates registered users based on their email and password.
+If valid, it returns a signed JWT token for secure access to protected endpoints.
 
-## Project Structure
+Protected Routes
+JWT authentication ensures that only logged-in users with valid tokens can access certain API routes.
 
+API Testing with Postman
+All endpoints were tested using Postman.
+The registration and login requests successfully returned valid JSON responses and authentication tokens.
+
+Technologies Used
+
+Backend Framework: Node.js with Express
+
+Database: MongoDB (Mongoose ODM)
+
+Authentication: Passport.js (Local Strategy) and JWT
+
+Environment Management: dotenv
+
+Testing Tool: Postman
+
+Version Control: Git and GitHub
+
+API Endpoints
+Method	Endpoint	Description
+POST	/api/auth/register	Registers a new user
+POST	/api/auth/login	Logs in an existing user
+GET	/api/trips	Retrieves available trips (can be secured with JWT)
+Example Responses
+
+Successful Registration
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+
+
+Successful Login
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+
+
+Invalid Credentials
+
+{
+  "message": "Invalid credentials"
+}
+
+Project Structure
 travlr/
 │
-├── app_api/ # API logic (routes, controllers, models)
-│ └── routes/trips.js
+├── app_api/
+│   ├── config/
+│   │   └── passport.js
+│   ├── controllers/
+│   │   ├── authentication.js
+│   │   └── trips.js
+│   ├── middleware/
+│   │   ├── authMiddleware.js
+│   │   └── verifyToken.js
+│   ├── models/
+│   │   ├── user.js
+│   │   └── trips.js
+│   ├── routes/
+│   │   ├── auth.js
+│   │   └── trips.js
+│   └── db.js
 │
-├── app_server/ # Express MVC structure for customer website
-│ ├── routes/
-│ ├── controllers/
-│ └── views/
+├── app_server/
+│   ├── controllers/
+│   ├── routes/
+│   └── views/
 │
-├── travlr-app/ # Angular project for SPA admin dashboard
-│ ├── src/app/
-│ │ ├── trip-list/
-│ │ ├── trip-card/
-│ │ └── trip-data.service.ts
+├── public/
+│   ├── css/
+│   ├── images/
+│   └── html files
 │
-├── public/ # Static files
-├── package.json # Node dependencies
-├── app.js # Main Express server file
-├── trips.json # Sample data for seeding the database
-└── README.md # Project documentation (this file)
+├── .env
+├── package.json
+├── app.js
+└── README.md
 
+Testing Instructions
 
----
+Run the MongoDB server locally or connect to your cloud database.
 
-## How to Run the Application
-
-### **1. Start MongoDB**
-Make sure MongoDB is running locally on your computer:
-```bash
-mongod
-
-Start the Express Server
-
-In the root directory (travlr):
+Open a terminal and start the API:
 
 npm start
 
 
-This will start the backend on http://localhost:3000
+Use Postman to test the endpoints:
 
-3. Start the Angular App
+POST http://localhost:3000/api/auth/register
 
-In the Angular directory (travlr-app):
+POST http://localhost:3000/api/auth/login
 
-ng serve
+Copy the JWT token returned and use it for accessing protected routes if required.
 
+Current Branch
 
-This will start the front end on http://localhost:4200
+The project for this submission is located on the module7 branch.
+GitHub repository:
+https://github.com/Ejkwon593/CS-465-fullstack/tree/module7
 
- Application Features
-Customer-Facing Website
+Instructor Notes
 
-Built with Express.js and Handlebars (HBS)
-
-Displays available travel destinations with descriptions and prices
-
-Dynamically renders content from MongoDB through the RESTful API
-
-Administrator SPA (Angular)
-
-Built with Angular components for modular UI
-
-Displays available trips retrieved from the API using HttpClient
-
-Uses a TripDataService to connect Angular with the backend
-
-Architecture supports adding PUT and POST routes for future editing and creation of trips
-
- Testing and Troubleshooting
-
-CORS Issue: Solved by installing and enabling the cors package in app.js
-
-API Connectivity: Tested GET endpoints via both the browser and Angular service
-
-Server Logs: Confirm backend and frontend both run concurrently (npm start + ng serve)
-
- Future Enhancements
-
-Implement full CRUD features (Add, Edit, Delete trip) via Angular
-
-Add authentication and admin login using JWT (JSON Web Tokens)
-
-Integrate search and filtering for trips
-
-Deploy to a live domain with MongoDB Atlas and Vercel/Render
+The API has been fully tested and verified using Postman.
+Registration and login endpoints return valid JSON Web Tokens, confirming successful authentication.
+The API server runs locally on port 3000, and CORS has been configured to allow communication with the Angular front-end running on port 4200.
